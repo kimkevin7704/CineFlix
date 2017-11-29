@@ -25,11 +25,11 @@ public class Driver {
 				}
 				
 				//change movie dates to 2017
-				//updateMovieYears();
+				updateMovieYears();
 				//populate phone number column with random 10 digit numbers
-				//populatePhoneNums();
+				populatePhoneNums();
 				//populate password column with random 20 char passwords
-				//populatePasswords();
+				populatePasswords();
 				System.out.println("updated movie years, phone numbers, passwords added");
 				
 				//display 8 most recent films
@@ -66,6 +66,50 @@ public class Driver {
 				List <Actor> actorList = new ArrayList <Actor>();
 				actorList = filmDAO.findActorsInFilm(filmsByAlphabet.get(0));
 				displayActors(actorList, maxDisplay);
+				
+				String tEmail = "MARY.SMITH@sakilacustomer.org";
+				Customer target = CustomerDAO.findCustomerWithEmail(tEmail);
+				String tPassword = target.getPassword();
+				System.out.println(tPassword);
+				System.out.println(target.getPassword());
+				System.out.println(target.getEmail());
+				System.out.println(tEmail);
+				
+				System.out.println("Attempt to log in to CyberFlix");
+				System.out.println("Correct email and password");
+				
+				if ((target.getEmail() == tEmail) || (target.getPassword() == tPassword))
+				{
+					System.out.println("Login Success.");
+				}
+				else
+				{
+					System.out.println("Login Failed.");
+				}
+				
+				String tPassword2 = "go";
+				System.out.println("Correct email and  incorrect password");
+				if ((target.getEmail() == tEmail) || (target.getPassword() == tPassword2))
+				{
+					System.out.println("Login Success.");
+				}
+				else
+				{
+					System.out.println("Login Failed.");
+				}
+				
+				
+				System.out.println("Incorrect email and  correct password");
+				String tEmail2 ="go@boo.org";
+				if ((target.getEmail() == tEmail2) && (target.getPassword() == tPassword))
+				{
+					System.out.println("Login Success.");
+				}
+				else
+				{
+					System.out.println("Login Failed.");
+				}
+
 			
 			} catch (Exception e) {
 				System.out.println("not connected to database");
