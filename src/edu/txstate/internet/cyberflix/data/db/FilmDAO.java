@@ -1,8 +1,5 @@
 package edu.txstate.internet.cyberflix.data.db;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -27,40 +24,37 @@ public class FilmDAO extends DAO {
 	private static final int    FILM_RATING_COLUMN      = 5;
 	private static final int    FILM_RELEASE_YEAR       = 6;
 	
-	private static final String FILM_SELECT_STRING      = "SELECT film.film_id, film.title, film.description," +
+	private static final String FILM_SELECT_STRING      = " SELECT film.film_id, film.title, film.description," +
 			"film.length, film.rating, film.release_year ";
 	private static final String CATEGORY_CLAUSES = " FROM film, film_category WHERE film.film_id = film_category.film_id AND film_category.category_id =";
-	private static final String ALPHABETICAL_CLAUSES = "FROM film WHERE film.title LIKE ?%";
+	private static final String ALPHABETICAL_CLAUSES = " FROM film WHERE film.title LIKE ?";
 
 	
 	public List <Film> findFilmsByAttributes (String title, String description, int length, FilmRating rating) {
 		String selectString = buildString (title, description, length, rating);
-		System.out.println(selectString);
-		List <Film> films = null;
+		List <Film> films = new ArrayList <Film>();
 		try {
 			Statement statement 	= Driver.conn.createStatement();
 			ResultSet results       = statement.executeQuery(selectString);
-			//films = buildResults (results);
-			System.out.println("made it past execute");
 			while(results.next())
 			{
-				int filmID, length;
-				String title, description, releaseYear, rating;
+				int filmID, length1;
+				String title1, description1, releaseYear, rating1;
 				FilmRating rawRating;
 				filmID = results.getInt("film.film_id");
-				title = results.getString("film.title");
-				description = results.getString("film.description");
+				title1 = results.getString("film.title");
+				description1 = results.getString("film.description");
 				releaseYear = results.getString("film.release_year");
-				length = results.getInt("film.length");
-				rating = results.getString("film.rating");
-				rawRating = FilmFactory.convert(rating);
+				length1 = results.getInt("film.length");
+				rating1 = results.getString("film.rating");
+				rawRating = FilmFactory.convert(rating1);
 				
-				Film film = new Film(filmID, title, description, releaseYear, length, rawRating);
+				Film film = new Film(filmID, title1, description1, releaseYear, length1, rawRating);
 				films.add(film);
 			}
 		} catch (SQLException e) {
-			System.err.println("FilmDAO.findFilmsByAttributes: " + e.toString());
-			LOGGER.severe(e.toString());
+			//System.err.println("FilmDAO.findFilmsByAttributes: " + e.toString());
+			//LOGGER.severe(e.toString());
 		}	
 		return films;
 	}
@@ -114,7 +108,6 @@ public class FilmDAO extends DAO {
 			stringBuilder.append(CATEGORY_CLAUSES);
 			stringBuilder.append(category.ordinal());
 			statementString = stringBuilder.toString();
-			System.out.println(statementString);
 			
 			ResultSet result = statement.executeQuery(statementString);
 
@@ -148,23 +141,22 @@ public class FilmDAO extends DAO {
 		PreparedStatement statement;
 		try {
 			statement = Driver.conn.prepareStatement(FILM_SELECT_STRING + ALPHABETICAL_CLAUSES);
-			statement.setString(1, firstCharacter);
-			String statementString1 = statement.toString();
-			System.out.println("made it and " + statement.toString());
 			
-			ResultSet result1 = statement.executeQuery(statementString1);
+			String statementString = "SELECT film.film_id, film.title, film.description,film.length, film.rating, film.release_year  FROM film WHERE film.title LIKE '" + firstCharacter + "%'";
+			
+			ResultSet result = statement.executeQuery(statementString);
 	
-			while(result1.next())
+			while(result.next())
 			{
 				int filmID, length;
 				String title, description, releaseYear, rating;
 				FilmRating rawRating;
-				filmID = result1.getInt("film.film_id");
-				title = result1.getString("film.title");
-				description = result1.getString("film.description");
-				releaseYear = result1.getString("film.release_year");
-				length = result1.getInt("film.length");
-				rating = result1.getString("film.rating");
+				filmID = result.getInt("film.film_id");
+				title = result.getString("film.title");
+				description = result.getString("film.description");
+				releaseYear = result.getString("film.release_year");
+				length = result.getInt("film.length");
+				rating = result.getString("film.rating");
 				rawRating = FilmFactory.convert(rating);
 				
 				Film film = new Film(filmID, title, description, releaseYear, length, rawRating);
@@ -270,7 +262,7 @@ public class FilmDAO extends DAO {
 			numberWhereClauses++;
 		}
 		String selectString = stringBuilder.toString();
-		LOGGER.info(selectString);
+		//LOGGER.info(selectString);
 		return selectString;
 	}
 
@@ -290,7 +282,7 @@ public class FilmDAO extends DAO {
 				films.add(film);
 			}
 		} catch (SQLException e) {
-			LOGGER.severe(e.toString());
+			//LOGGER.severe(e.toString());
 		}
 		return films;
 	}

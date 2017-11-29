@@ -44,6 +44,10 @@ public class Film {
 		this.actors = actors;
 	}
 	
+	public Film() {
+		
+	}
+	
 	public void addActor (Actor anActor) {
 		if (!actors.contains(anActor)) actors.add(anActor);
 	}

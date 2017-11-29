@@ -32,4 +32,17 @@ public class FilmFactory {
 		default: return Film.FilmRating.UR;
 		}
 	}
+	
+	public static String convertBack (Film.FilmRating rating) {
+		switch (rating) {
+		case G: return "G";
+		case PG: return "PG";
+		case PG_13: return "PG-13";
+		case R: return "R";
+		case NC_17: return "NC-17";
+		case X: return "X";
+		case UR: return "UR";
+		default: return "UR";
+		}
+	}
 }

@@ -9,7 +9,7 @@ import edu.txstate.internet.cyberflix.data.film.Film;
 
 public class ActorDAO extends DAO{
 	
-	private static final String ACTOR_FIND_STRING = "SELECT actor_id, first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = ?);";
+	private static final String ACTOR_FIND_STRING = "SELECT actor_id, first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = ?)";
 	
 	public List <Actor> getActorsInFilm(Film film)
 	{
@@ -19,9 +19,9 @@ public class ActorDAO extends DAO{
 		//get all actor_id from film_actor by checking with film_id
 		
 		try {
+			String statementString = "SELECT actor_id, first_name, last_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = " + filmID + ")";
 			java.sql.PreparedStatement getActorsStatement = Driver.conn.prepareStatement(ACTOR_FIND_STRING);
-			getActorsStatement.setString(1, filmID);
-			ResultSet result = getActorsStatement.executeQuery(getActorsStatement.toString());
+			ResultSet result = getActorsStatement.executeQuery(statementString);
 			
 			while(result.next())
 			{

@@ -5,9 +5,9 @@ import java.util.List;
 import java.sql.*;
 import java.util.*;
 
+import edu.txstate.internet.cyberflix.data.actor.Actor;
 import edu.txstate.internet.cyberflix.data.film.Film;
 import edu.txstate.internet.cyberflix.data.film.FilmCategory;
-import com.mysql.jdbc.PreparedStatement;
 
 public class Driver {
 
@@ -39,32 +39,33 @@ public class Driver {
 				displayNewFilms(newestFilms, maxDisplay);
 				
 				//browse by attribute
-				Film.FilmRating filmRating = Film.FilmRating.R;
+				Film.FilmRating filmRating = Film.FilmRating.PG;
 				List<Film> filmsByAttribute = new ArrayList<Film>();
-				filmsByAttribute = filmDAO.findFilmsByAttributes("agent", "drama", 70, filmRating);
-				System.out.println("top 8 results from attribute search:\n\n");
+				filmsByAttribute = filmDAO.findFilmsByAttributes("academy", "a", 200, filmRating);
+				System.out.println("results from attribute search:\n\n");
 				displayResults(filmsByAttribute, maxDisplay);
 				
 				//browse by category with test example "COMEDY"
-//				FilmCategory sampleCategory = FilmCategory.COMEDY;
-//				List<Film> filmsByCategory = new ArrayList<Film>();
-//				filmsByCategory = filmDAO.findFilmsByCategory(sampleCategory);
-//				System.out.println("top 8 results from category search:\n\n");
-//				displayResults(filmsByCategory, maxDisplay);
-//				System.out.println("got to end of category");
+				maxDisplay = 200;
+				FilmCategory sampleCategory = FilmCategory.COMEDY;
+				List<Film> filmsByCategory = new ArrayList<Film>();
+				filmsByCategory = filmDAO.findFilmsByCategory(sampleCategory);
+				System.out.println("results from category search:\n\n");
+				displayResults(filmsByCategory, maxDisplay);
 				
 				//browse alphabetically
-//				List<Film> filmsByAlphabet = new ArrayList<Film>();
-//				System.out.println("before alphabet search");
-//				filmsByAlphabet = filmDAO.findFilmsAlphabetically("f");
-//				System.out.println("after search");
-//				System.out.println("first 8 movies starting with F:\n\n");
-//				displayResults(filmsByAlphabet, maxDisplay);
+				List<Film> filmsByAlphabet = new ArrayList<Film>();
+				filmsByAlphabet = filmDAO.findFilmsAlphabetically("f");
+				System.out.println("movies starting with F:\n\n");
+				displayResults(filmsByAlphabet, maxDisplay);
 				
-				
-				
-				
-				
+				//show film details for move
+				Film filmDetail = new Film();
+				filmDetail = filmDAO.getFilmDetail(filmsByAlphabet.get(0));
+				System.out.println("\n" + "Getting film details of Factory Dragon\n\n" + filmDetail.toString() + "\n\n");
+				List <Actor> actorList = new ArrayList <Actor>();
+				actorList = filmDAO.findActorsInFilm(filmsByAlphabet.get(0));
+				displayActors(actorList, maxDisplay);
 			
 			} catch (Exception e) {
 				System.out.println("not connected to database");
@@ -150,22 +151,42 @@ public class Driver {
 	}
 	
 	public static void displayNewFilms(List<Film> newFilms, int maxDisplay) {
-		System.out.println("\n\nthe top 5 newest films are: \n");	
-		for(int i = 0; i < maxDisplay; i++)
+		System.out.println("\n\nthe top 8 newest films are: \n");	
+		for(int i = 0; i < newFilms.size(); i++)
 		{
-			Film film = newFilms.get(i);
-			String filmString = film.toString();
-			System.out.println(i+1 + ". " + filmString);
+			if(i < maxDisplay)
+			{
+				Film film = newFilms.get(i);
+				String filmString = film.toString();
+				System.out.println(i+1 + ". " + filmString);
+			}
 		}
 		System.out.println("\n\n");
 	}
 	
 	public static void displayResults(List<Film> filmList, int maxDisplay) {	
-		for(int i = 0; i < maxDisplay; i++)
+		for(int i = 0; i < filmList.size(); i++)
 		{
-			Film film = filmList.get(i);
-			String filmString = film.toString();
-			System.out.println(i+1 + ". " + filmString);
+			if(i < maxDisplay)
+			{
+				Film film = new Film();
+				film = filmList.get(i);
+				String filmString = film.toString();
+				System.out.println(i+1 + ". " + filmString);
+			}
+		}
+		System.out.println("\n\n");
+	}
+	
+	public static void displayActors(List<Actor> actorList, int maxDisplay) {
+		System.out.println("Actors:\n");
+		for(int i = 0; i < actorList.size(); i++)
+		{
+			if(i < maxDisplay)
+			{
+				String actorString = actorList.get(i).toString();
+				System.out.println(i+1 + ". " + actorString + "\n");
+			}
 		}
 		System.out.println("\n\n");
 	}
