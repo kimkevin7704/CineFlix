@@ -59,7 +59,7 @@ public class Driver {
 				System.out.println("movies starting with F:\n\n");
 				displayResults(filmsByAlphabet, maxDisplay);
 				
-				//show film details for move
+				//show film details for movie
 				Film filmDetail = new Film();
 				filmDetail = filmDAO.getFilmDetail(filmsByAlphabet.get(0));
 				System.out.println("\n" + "Getting film details of Factory Dragon\n\n" + filmDetail.toString() + "\n\n");
@@ -67,6 +67,16 @@ public class Driver {
 				actorList = filmDAO.findActorsInFilm(filmsByAlphabet.get(0));
 				displayActors(actorList, maxDisplay);
 				
+				//add movie to cart
+				//Cart customerCart = new Cart();
+				
+				Cart.addMovieToCart(filmDetail);
+				System.out.println("Movies in cart: \n\n");
+				Cart.getInstance();
+				Cart.showMoviesInCart();
+				System.out.println();
+				
+				//simulate the customer login use-case
 				String tEmail = "MARY.SMITH@sakilacustomer.org";
 				Customer target = CustomerDAO.findCustomerWithEmail(tEmail);
 				String tPassword = target.getPassword();
@@ -96,9 +106,7 @@ public class Driver {
 				else
 				{
 					System.out.println("Login Failed.");
-				}
-				
-				
+				}	
 				System.out.println("Incorrect email and  correct password");
 				String tEmail2 ="go@boo.org";
 				if ((target.getEmail() == tEmail2) && (target.getPassword() == tPassword))
@@ -109,8 +117,6 @@ public class Driver {
 				{
 					System.out.println("Login Failed.");
 				}
-
-			
 			} catch (Exception e) {
 				System.out.println("not connected to database");
 			}
@@ -119,6 +125,7 @@ public class Driver {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public static void updateMovieYears() {
 		int[] newFilms = {1, 50, 111, 206, 271, 299, 438, 494};

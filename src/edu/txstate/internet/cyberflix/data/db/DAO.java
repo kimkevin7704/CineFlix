@@ -8,10 +8,10 @@ public abstract class DAO {
 
 	private static final String DB_NAME = "sakila";
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/sakila?autoReconnect=true&useSSL=true";
+	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/sakila";
 
 	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "H0h4c.7704";   // fill this in with your root pw
+	private static final String DB_PASSWORD = "gingerpaws";   // fill this in with your root pw
 
 	public static Connection getDBConnection() {
 		Connection dbConnection = null;
